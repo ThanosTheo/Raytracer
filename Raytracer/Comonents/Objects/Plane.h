@@ -15,9 +15,9 @@ public:
 	Plane(Vector point, Vector normal, Material material);
 
 	Vector getPoint() { return point; }
-	Vector getNormal() { return normal; }
+	virtual Vector getNormalAt(Vector point) { return normal; }
 	virtual Material getMaterial() { return material; }
 
-	double Intersect(Ray ray);
+	float Intersect(Ray ray);
 };
 

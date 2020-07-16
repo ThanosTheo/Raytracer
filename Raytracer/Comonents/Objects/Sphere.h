@@ -8,21 +8,21 @@
 class Sphere : public Object {
 private:
 	Vector center;
-	double radius;
+	float radius;
 	Material material;
 public:
 
 	Sphere();
-	Sphere(Vector position, double radius, Material material = Material());
+	Sphere(Vector position, float radius, Material material = Material());
 
 	Vector getCenter() { return center; }
-	double getRadius() { return radius; }
+	float getRadius() { return radius; }
 	virtual Material getMaterial() { return material; }
 
-	Vector getNormal(Vector point) 
+	virtual Vector getNormalAt(Vector point) 
 	{ 
 		return (point + center.invert()).normalize();
 	}
 
-	double Intersect(Ray ray);
+	float Intersect(Ray ray);
 };

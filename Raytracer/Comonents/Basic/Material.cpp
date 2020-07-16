@@ -1,20 +1,20 @@
 #include "Material.h"
 
 Material::Material() {
-	R = 122;
-	G = 122;
-	B = 122;
-	reflectivity = 0;
+	R = 0.5f;
+	G = 0.5f;
+	B = 0.5f;
+	reflectivity = 0.0f;
 }
 
-Material::Material(double r, double g, double b, double refl) {
+Material::Material(float r, float g, float b, float refl) {
 	R = r;
 	G = g;
 	B = b;
 	reflectivity = refl;
 }
 
-Material Material::operator * (const double& value) {
+Material Material::operator * (const float& value) {
 	return Material(R * value, G * value, B * value, reflectivity);
 }
 

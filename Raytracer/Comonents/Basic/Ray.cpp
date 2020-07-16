@@ -29,8 +29,8 @@ void Ray::computeDir(int x, int y, Camera camera) {
 	Vector tn = Vector::cross(vn, bn);
 
 	// calculate pixel shifting vectors
-	double gx = (double)VIEWPORT_DISTANCE * tan((FOV / 2) * (M_PI / 180));
-	double gy = gx / ASPECT_RATIO;
+	float gx = (float)VIEWPORT_DISTANCE * tan((FOV / 2) * (M_PI / 180));
+	float gy = gx / ASPECT_RATIO;
 
 	Vector qx = bn * (2 * gx) / IMAGE_WIDTH;
 	Vector qy = vn * (2 * gy) / IMAGE_HEIGHT;

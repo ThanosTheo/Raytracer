@@ -5,18 +5,18 @@
 class Vector
 {
 private:
-	double x, y, z;
+	float x, y, z;
 public:
 	Vector();
-	Vector(double a, double b, double c);
+	Vector(float a, float b, float c);
 
-	double getX() { return x; }
-	double getY() { return y; }
-	double getZ() { return z; }
+	float getX() { return x; }
+	float getY() { return y; }
+	float getZ() { return z; }
 
 	void operator = (const Vector&);
 
-	Vector operator * (const double);
+	Vector operator * (const float);
 	Vector operator / (const int);
 
 	Vector operator + (const Vector&);
@@ -25,7 +25,7 @@ public:
 
 
 	// normalize vector
-	double magnitude();
+	float magnitude();
 	Vector normalize();
 
 	// invert vector
@@ -42,7 +42,7 @@ public:
 	}
 
 	// dot product
-	static double dot(Vector first, Vector seccond) {
+	static float dot(Vector first, Vector seccond) {
 		return (first.x * seccond.x) + (first.y * seccond.y) + (first.z * seccond.z);
 	}
 };

@@ -2,7 +2,7 @@
 
 Light::Light(){
 	position = Vector();
-	material = Material(255, 255, 255, 0);
+	material = Material(1.0f, 1.0f, 1.0f, 0);
 }
 
 Light::Light(Vector pos, Material mat) {

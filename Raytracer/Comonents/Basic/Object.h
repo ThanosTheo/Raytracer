@@ -8,7 +8,9 @@ class Object {
 public:
 	Object() {};
 
-	virtual double Intersect(Ray r) { return 0; }
+	virtual float Intersect(Ray r) { return 0; }
 
 	virtual Material getMaterial() { return Material(); }
+	virtual Vector getPosition() { return Vector(0,0,0); }
+	virtual Vector getNormalAt(Vector point) { return Vector(0,1,0); }
 };

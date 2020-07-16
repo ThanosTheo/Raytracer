@@ -12,12 +12,12 @@ Plane::Plane(Vector p,Vector norm, Material mat){
 	material = mat;
 }
 
-double Plane::Intersect(Ray ray) {
+float Plane::Intersect(Ray ray) {
 
-	double denom = Vector::dot(normal, ray.getDirection());
+	float denom = Vector::dot(normal, ray.getDirection());
 	
 	if (denom < 0) {
-		double t = Vector::dot(point - ray.getOrigin(), normal) / denom;
+		float t = Vector::dot(point - ray.getOrigin(), normal) / denom;
 
 		return t;
 	}
