@@ -21,6 +21,7 @@ public:
 
 	Vector operator + (const Vector&);
 	Vector operator - (const Vector&);
+	Vector operator * (const Vector&);
 	Vector operator / (const Vector&);
 
 

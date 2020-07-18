@@ -22,12 +22,12 @@ float Sphere::Intersect(Ray ray){
 	float D = pow(b, 2) - 4 * a * c;
 
 	if (D > 0) {
-		float t1 = (-b + sqrt(D)) / (2.0 * a);
-		float t2 = (-b - sqrt(D)) / (2.0 * a);
+		float t1 = ((float)(-b) + sqrt(D)) / (2.0f * a);
+		float t2 = ((float)(-b) - sqrt(D)) / (2.0f * a);
 		return (t1 < t2) ? t1 : t2;
 	}
 	else if (D == 0) {
-		float min = -b / (2.0 * a);
+		float min = -b / (2.0f * a);
 		return min;
 	}
 	else {

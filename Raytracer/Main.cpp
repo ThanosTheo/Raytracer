@@ -28,14 +28,18 @@ const int IMAGE_WIDTH = 1280;
 const int IMAGE_HEIGHT = 720;
 const float ASPECT_RATIO = (float)IMAGE_WIDTH / (float)IMAGE_HEIGHT;
 const float VIEWPORT_DISTANCE = 1;
-const int FOV = 90;
-const float AMBIENT_LIGHT = 0.2f;
+const int FOV = 45;
+const float AMBIENT_LIGHT = 0.3f;
+const double ERROR = 10;
 
 Material getPixelColor(Ray ray, float min, int index, std::vector<Object*> Objects, std::vector<Object*> lightSources) {
 	Vector intersectionPoint = ray.getOrigin() + ray.getDirection() * min;
 	Vector n = Objects.at(index)->getNormalAt(intersectionPoint);
 
 	Material result = Objects.at(index)->getMaterial() * AMBIENT_LIGHT;
+
+
+
 	// Check if object is lit for each light source
 	for (auto const& light : lightSources) {
 		//create a ray to the light and check if there is an object between the two
@@ -64,21 +68,6 @@ Material getPixelColor(Ray ray, float min, int index, std::vector<Object*> Objec
 			}
 
 			result = result + (Objects.at(index)->getMaterial() * light->getMaterial() * nl);
-
-			if (Objects.at(index)->getMaterial().getReflectivity() > 0) {
-				double dot1 = Vector::dot(n, ray.getDirection().invert());
-				Vector scalar1 = n * dot1;
-				Vector add1 = scalar1 + ray.getDirection();
-				Vector scalar2 = add1 * 2;
-				Vector add2 = ray.getDirection().invert() + scalar2;
-				Vector refDir = add2.normalize();
-
-				double specular = Vector::dot(refDir, lightDirection);
-				if (specular > 0) {
-					specular = pow(specular, 10);
-					result = result + light->getMaterial() * Objects.at(index)->getMaterial().getReflectivity() * specular; 
-				}
-			}
 		}
 	}
 	Material::clamp(result);
@@ -91,29 +80,34 @@ int main() {
 	cv::Mat image(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3, cv::Scalar(0, 0, 0));
 
 	// define the camera
-	Vector position(0, 1.1, -1);
+	Vector position(0, 2.1, -10);
 	Vector lookAt(0, 0 , 4);
 	Camera camera(position, lookAt);
 
 	// Define basic colors;
-	Material white(1.0f, 1.0f, 1.0f);
-	Material green(0.5f, 1.0f, 0.5f);
-	Material blue(0.5f, 0.5f, 1.0f);
-	Material maroon(0.5f, 0.4f, 0.4f);
-	Material black(0.0f, 0.0f, 0.0f);
-	Material grey;
+	Material white(1.0, 1.0, 1.0);
+
+	Material blue(0.07058, 0.76078 , 0.91372);
+	Material purple(0.76862, 0.44313, 0.92941);
+	Material red(0.96470, 0.30980, 0.34901);
+	Material darkBlue(0.17254, 0.32549, 0.39215);
+	Material black(0.0, 0.0, 0.0);
 
 	Light light(Vector(-7, 5, 0), white);
 	std::vector<Object*> lightSources;
 	lightSources.push_back(dynamic_cast<Object*>(&light));
 
 	// Schene Objects
-	Sphere sphere(Vector(0, 0, 4), 1, green);
-	Plane  plane(Vector(0, -1, 0),Vector(0, 1, 0), maroon);
+	Sphere sphere1(Vector(-3, 0, 3), 1, blue);
+	Sphere sphere2(Vector(0, 0, 4), 1, purple);
+	Sphere sphere3(Vector(3, 0, 2), 1, red);
+	Plane  plane(Vector(0, -1, 0),Vector(0, 1, 0), darkBlue);
 
 	// Generate a vector of objects for checking Intersections
 	std::vector<Object*> Objects;
-	Objects.push_back(dynamic_cast<Object*>(&sphere));
+	Objects.push_back(dynamic_cast<Object*>(&sphere1));
+	Objects.push_back(dynamic_cast<Object*>(&sphere2));
+	Objects.push_back(dynamic_cast<Object*>(&sphere3));
 	Objects.push_back(dynamic_cast<Object*>(&plane));
 
 	// Generate the image
@@ -128,14 +122,13 @@ int main() {
 
 			// find the object that we see in the current pixel.
 			float min = INFINITY;
-			int count = 0, index = -1;
-			for (auto const& obj: Objects) {
-				float distance = obj->Intersect(ray);
-				if (min > distance) {
+			int index = -1;
+			for (int i = 0; i < Objects.size(); i++) {
+				float distance = Objects.at(i)->Intersect(ray);
+				if (min > distance && index != i) {
 					min = distance;
-					index = count;
+					index = i;
 				}
-				count++;
 			}
 
 			if (index != -1) {

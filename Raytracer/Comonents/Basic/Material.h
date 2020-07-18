@@ -3,17 +3,16 @@
 class Material
 {
 private:
-	float R, G, B, reflectivity;
+	double R, G, B;
 public:
 	Material();
-	Material(float r, float g, float b, float reflectivity = 0.0f);
+	Material(double r, double g, double b);
 
-	float getR() { return R; };
-	float getG() { return G; };
-	float getB() { return B; };
-	float getReflectivity() { return reflectivity; };
+	double getR() { return R; };
+	double getG() { return G; };
+	double getB() { return B; };
 
-	float brightness() { return (R + G + B) / 3; }
+	double brightness() { return (R + G + B) / 3; }
 
 
 	// vale operations
@@ -31,8 +30,8 @@ public:
 	void setB(float b) { B = b; };
 
 	static void clamp(Material &mat) {
-		float sumLight = mat.R + mat.G + mat.B;
-		float excesslight = sumLight - 3;
+		double sumLight = mat.R + mat.G + mat.B;
+		double excesslight = sumLight - 3;
 		if (excesslight > 0) {
 			mat.R = mat.R + excesslight * (mat.R / sumLight);
 			mat.G = mat.G + excesslight * (mat.G / sumLight);

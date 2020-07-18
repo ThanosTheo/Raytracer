@@ -21,7 +21,7 @@ public:
 
 	virtual Vector getNormalAt(Vector point) 
 	{ 
-		return (point + center.invert()).normalize();
+		return Vector(point - center);
 	}
 
 	float Intersect(Ray ray);
