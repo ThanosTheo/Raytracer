@@ -16,6 +16,10 @@ Material Material::operator * (const float& value) {
 	return Material(R * value, G * value, B * value);
 }
 
+Material Material::operator / (const float& value) {
+	return Material(R / value, G / value, B / value);
+}
+
 Material Material::operator + (const Material& mat) {
 	return Material(R + mat.R, G + mat.G, B + mat.B);
 }

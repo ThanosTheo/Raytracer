@@ -16,7 +16,8 @@ public:
 
 
 	// vale operations
-	Material operator * ( const float& value);
+	Material operator * (const float& value);
+	Material operator / (const float& value);
 
 	// material operations
 	Material operator + (const Material& material);
