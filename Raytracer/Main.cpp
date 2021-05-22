@@ -31,19 +31,28 @@ const float VIEWPORT_DISTANCE = 1;
 const int FOV = 45;
 const float AMBIENT_LIGHT = 0.3f;
 const double ERROR = 10;
+const float SPECULAR_HARDNESS = 1000;
 
-Material getPixelColor(Ray ray, float min, int index, std::vector<Object*> Objects, std::vector<Object*> lightSources) {
+void Saturate(float& value) {
+	if (value > 1.0) {
+		value = 1.0;
+	}
+	else if (value < 0.0) {
+		value = 0.0;
+	}
+}
+
+Material getPixelColor(Ray ray, float min, int index, std::vector<Object*> Objects, std::vector<Light*> lightSources) {
 	Vector intersectionPoint = ray.getOrigin() + ray.getDirection() * min;
 	Vector n = Objects.at(index)->getNormalAt(intersectionPoint);
 
 	Material result = Objects.at(index)->getMaterial() * AMBIENT_LIGHT;
 
-
-
 	// Check if object is lit for each light source
 	for (auto const& light : lightSources) {
 		//create a ray to the light and check if there is an object between the two
 		Vector lightDirection = (light->getPosition() - intersectionPoint).normalize();
+		float distance = Vector::distance(light->getPosition(), intersectionPoint);
 		Ray lightRay(intersectionPoint, lightDirection);
 
 		bool hit = false;
@@ -58,16 +67,20 @@ Material getPixelColor(Ray ray, float min, int index, std::vector<Object*> Objec
 		if (!hit) {
 			// Blinn-Phong
 			float nl = Vector::dot(n, lightDirection);
+			
+			float intensity = nl;
+			Saturate(intensity);
 
-			// clamp nl between 0 and 1
-			if (nl > 1.0) {
-				nl = 1.0;
-			}
-			else if (nl < 0.0) {
-				nl = 0.0;
-			}
+			Material DiffuseColor =  light->getMaterial() * light->getDiffusePower() * intensity  / distance;
 
-			result = result + (Objects.at(index)->getMaterial() * light->getMaterial() * nl);
+			Vector h = (ray.getDirection() + light->getPosition()).normalize();
+			float nh = Vector::dot(n, h);
+			Saturate(nh);
+			intensity = pow(nh , SPECULAR_HARDNESS);
+
+			Material SpecularColor = light->getMaterial() * light->getSpecularPower() *intensity / distance;
+			
+			result = result + DiffuseColor + SpecularColor;
 		}
 	}
 	Material::clamp(result);
@@ -93,9 +106,9 @@ int main() {
 	Material darkBlue(0.17254, 0.32549, 0.39215);
 	Material black(0.0, 0.0, 0.0);
 
-	Light light(Vector(-7, 5, 0), white);
-	std::vector<Object*> lightSources;
-	lightSources.push_back(dynamic_cast<Object*>(&light));
+	Light light(Vector(-2, 2, -3), white, 3, 3);
+	std::vector<Light*> lightSources;
+	lightSources.push_back(dynamic_cast<Light*>(&light));
 
 	// Schene Objects
 	Sphere sphere1(Vector(-3, 0, 3), 1, blue);
