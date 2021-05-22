@@ -31,7 +31,7 @@ const float VIEWPORT_DISTANCE = 1;
 const int FOV = 45;
 const float AMBIENT_LIGHT = 0.3f;
 const double ERROR = 10;
-const float SPECULAR_HARDNESS = 1000;
+const float SPECULAR_HARDNESS = 100;
 
 void Saturate(float& value) {
 	if (value > 1.0) {
