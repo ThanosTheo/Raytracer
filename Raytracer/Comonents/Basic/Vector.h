@@ -46,5 +46,10 @@ public:
 	static float dot(Vector first, Vector seccond) {
 		return (first.x * seccond.x) + (first.y * seccond.y) + (first.z * seccond.z);
 	}
+
+	// euclidian distance of product
+	static float distance(Vector first, Vector seccond) {
+		return sqrt(pow(first.x - seccond.x, 2) + pow(first.y - seccond.y, 2) + pow(first.z - seccond.z, 2));
+	}
 };
 

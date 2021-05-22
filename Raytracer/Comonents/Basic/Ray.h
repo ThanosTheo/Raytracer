@@ -14,5 +14,6 @@ public:
 	Vector getDirection() { return direction; }
 
 	void computeDir(int pixelX,int pixelY, Camera camera);
+
 };
 
